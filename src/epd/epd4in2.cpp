@@ -125,11 +125,11 @@ void Epd::SetPartialWindow(const unsigned char* buffer_black, int x, int y, int 
     DelayMs(2);
     SendCommand(DATA_START_TRANSMISSION_2);
     if (buffer_black != NULL) {
-        for(int i = 0; i < w  / 8 * l; i++) {
+        for(int i = 0; i < (w  / 8) * l; i++) {
             SendData(buffer_black[i]);  
         }  
     } else {
-        for(int i = 0; i < w  / 8 * l; i++) {
+        for(int i = 0; i < (w  / 8) * l; i++) {
             SendData(0x00);  
         }  
     }

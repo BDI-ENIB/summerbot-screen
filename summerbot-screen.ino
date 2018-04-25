@@ -7,19 +7,19 @@ Screen *screen;
 void setup() {
 	
 	Serial.begin(9600);
-	delay(5000); //for serial
+	delay(100); //for serial
 	
 	Serial.println("start");
-	delay(5000);
+	delay(100);
 	screen = new Screen;
 	
 	Serial.println("clear");
-	delay(5000);
+	delay(100);
 	screen->clearScreen();
 
 	Serial.println("display");
-	delay(5000);
-	screen->display(123);
+	delay(100);
+	screen->displayScore(380);
 	
 	Serial.println("end");
 	

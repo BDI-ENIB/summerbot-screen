@@ -23,7 +23,7 @@ public :
 
 	Screen();
 	void init();
-	void display (const int score);
+	void displayScore(const int score);
 	void clearScreen(){
 		epd_->ClearFrame();
 		epd_->DisplayFrame();
