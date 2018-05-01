@@ -95,6 +95,10 @@ void Epd::WaitUntilIdle(void) {
     }      
 }
 
+bool Epd::isBusy() {
+	return (DigitalRead(busy_pin) == 0);
+}
+
 /**
  *  @brief: module reset. 
  *          often used to awaken the module in deep sleep, 
@@ -115,8 +119,9 @@ void Epd::SetPartialWindow(const unsigned char* buffer_black, int x, int y, int 
     SendCommand(PARTIAL_WINDOW);
     SendData(x >> 8);
     SendData(x & 0xf8);     // x should be the multiple of 8, the last 3 bit will always be ignored
-    SendData(((x & 0xf8) + w  - 1) >> 8);
-    SendData(((x & 0xf8) + w  - 1) | 0x07);
+	int su = x + w -1; 
+    SendData(su >> 8);
+    SendData((su & 0xff) | 0x07);
     SendData(y >> 8);        
     SendData(y & 0xff);
     SendData((y + l - 1) >> 8);        
@@ -242,7 +247,7 @@ void Epd::DisplayFrame(void) {
     SetLut();
     SendCommand(DISPLAY_REFRESH); 
     DelayMs(100);
-    WaitUntilIdle();
+    // WaitUntilIdle();
 }
 
 /**

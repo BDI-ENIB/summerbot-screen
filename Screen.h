@@ -3,7 +3,7 @@
 
 //---define
 
-#define THICKNESS 20
+#define THICKNESS 10
 #define COLORED     0
 #define UNCOLORED   1
 
@@ -23,11 +23,16 @@ public :
 
 	Screen();
 	void init();
-	void displayScore(const int score);
-	void clearScreen(){
+	void setScore(const int score);
+	void clearScreen() {
 		epd_->ClearFrame();
 		epd_->DisplayFrame();
 	}
+	void initFrame();
+	bool isBusy() {
+		return epd_->isBusy();
+	}
+	void update();
 
 private :
 
@@ -36,6 +41,7 @@ private :
 	Epd *epd_;
 	Paint *paint_;
 	char numbers_[10];
+	int table_[7][4];
 	
 };
 

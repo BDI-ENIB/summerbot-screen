@@ -90,6 +90,7 @@ public:
     void SendCommand(unsigned char command);
     void SendData(unsigned char data);
     void WaitUntilIdle(void);
+	bool isBusy(); //added
     void Reset(void);
     void SetPartialWindow(const unsigned char* frame_buffer, int x, int y, int w, int l);
     void SetPartialWindowBlack(const unsigned char* buffer_black, int x, int y, int w, int l);
