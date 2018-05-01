@@ -2,7 +2,7 @@
  *  @filename   :   epd4in2.h
  *  @brief      :   Header file for Dual-color e-paper library epd4in2.cpp
  *  @author     :   Yehui from Waveshare
- *  
+ *
  *  Copyright (C) Waveshare     August 10 2017
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -46,7 +46,7 @@
 #define DATA_STOP                                   0x11
 #define DISPLAY_REFRESH                             0x12
 #define DATA_START_TRANSMISSION_2                   0x13
-#define LUT_FOR_VCOM                                0x20 
+#define LUT_FOR_VCOM                                0x20
 #define LUT_WHITE_TO_WHITE                          0x21
 #define LUT_BLACK_TO_WHITE                          0x22
 #define LUT_WHITE_TO_BLACK                          0x23
@@ -93,8 +93,7 @@ public:
 	bool isBusy(); //added
     void Reset(void);
     void SetPartialWindow(const unsigned char* frame_buffer, int x, int y, int w, int l);
-    void SetPartialWindowBlack(const unsigned char* buffer_black, int x, int y, int w, int l);
-    void SetPartialWindowRed(const unsigned char* buffer_red, int x, int y, int w, int l);
+    void fillPartialWindow(int x, int y, int w, int l, const int colored);
     void SetLut(void);
     void DisplayFrame(const unsigned char* frame_buffer);
     void DisplayFrame(void);

@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-#include "arduino.h"
+#include "Arduino.h"
 #include <stdlib.h>
 #include "epd4in2.h"
 
@@ -92,23 +92,25 @@ void Epd::SendData(unsigned char data) {
 void Epd::WaitUntilIdle(void) {
     while(DigitalRead(busy_pin) == 0) {      //0: busy, 1: idle
         DelayMs(100);
-    }      
+    }
 }
-
+/**
+ *  Return the screen's state
+ */
 bool Epd::isBusy() {
 	return (DigitalRead(busy_pin) == 0);
 }
 
 /**
- *  @brief: module reset. 
- *          often used to awaken the module in deep sleep, 
+ *  @brief: module reset.
+ *          often used to awaken the module in deep sleep,
  *          see Epd::Sleep();
  */
 void Epd::Reset(void) {
     DigitalWrite(reset_pin, LOW);
     DelayMs(200);
     DigitalWrite(reset_pin, HIGH);
-    DelayMs(200);   
+    DelayMs(200);
 }
 
 /**
@@ -119,58 +121,90 @@ void Epd::SetPartialWindow(const unsigned char* buffer_black, int x, int y, int 
     SendCommand(PARTIAL_WINDOW);
     SendData(x >> 8);
     SendData(x & 0xf8);     // x should be the multiple of 8, the last 3 bit will always be ignored
-	int su = x + w -1; 
+		int su = x + w -1;
     SendData(su >> 8);
     SendData((su & 0xff) | 0x07);
-    SendData(y >> 8);        
+    SendData(y >> 8);
     SendData(y & 0xff);
-    SendData((y + l - 1) >> 8);        
+    SendData((y + l - 1) >> 8);
     SendData((y + l - 1) & 0xff);
-    SendData(0x01);         // Gates scan both inside and outside of the partial window. (default) 
+    SendData(0x01);         // Gates scan both inside and outside of the partial window. (default)
     DelayMs(2);
     SendCommand(DATA_START_TRANSMISSION_2);
     if (buffer_black != NULL) {
         for(int i = 0; i < (w  / 8) * l; i++) {
-            SendData(buffer_black[i]);  
-        }  
+            SendData(buffer_black[i]);
+        }
     } else {
         for(int i = 0; i < (w  / 8) * l; i++) {
-            SendData(0x00);  
-        }  
+            SendData(0x00);
+        }
     }
     DelayMs(2);
-    SendCommand(PARTIAL_OUT);  
+    SendCommand(PARTIAL_OUT);
+}
+
+/**
+ *  @brief: Fill the SRAM with specified data whithout using any buffer
+ */
+void Epd::fillPartialWindow(int x, int y, int w, int l, const int colored) {
+    SendCommand(PARTIAL_IN);
+    SendCommand(PARTIAL_WINDOW);
+    SendData(x >> 8);
+    SendData(x & 0xf8);     // x should be the multiple of 8, the last 3 bit will always be ignored
+    int su = x + w -1;
+    SendData(su >> 8);
+    SendData((su & 0xff) | 0x07);
+    SendData(y >> 8);
+    SendData(y & 0xff);
+    SendData((y + l - 1) >> 8);
+    SendData((y + l - 1) & 0xff);
+    SendData(0x01);         // Gates scan both inside and outside of the partial window. (default)
+    DelayMs(2);
+    SendCommand(DATA_START_TRANSMISSION_2);
+
+    if(colored) {
+      for(int i = 0; i < (w / 8) * l; i++) {
+        SendData(0x80);
+      }
+    } else {
+      for(int i = 0; i < (w / 8) * l; i++) {
+        SendData(0x00);
+      }
+    }
+    DelayMs(2);
+    SendCommand(PARTIAL_OUT);
 }
 
 /**
  *  @brief: set the look-up table
  */
 void Epd::SetLut(void) {
-    unsigned int count;     
+    unsigned int count;
     SendCommand(LUT_FOR_VCOM);                            //vcom
     for(count = 0; count < 44; count++) {
         SendData(lut_vcom0[count]);
     }
-    
+
     SendCommand(LUT_WHITE_TO_WHITE);                      //ww --
     for(count = 0; count < 42; count++) {
         SendData(lut_ww[count]);
-    }   
-    
+    }
+
     SendCommand(LUT_BLACK_TO_WHITE);                      //bw r
     for(count = 0; count < 42; count++) {
         SendData(lut_bw[count]);
-    } 
+    }
 
     SendCommand(LUT_WHITE_TO_BLACK);                      //wb w
     for(count = 0; count < 42; count++) {
         SendData(lut_bb[count]);
-    } 
+    }
 
     SendCommand(LUT_BLACK_TO_BLACK);                      //bb b
     for(count = 0; count < 42; count++) {
         SendData(lut_wb[count]);
-    } 
+    }
 }
 
 /**
@@ -178,13 +212,13 @@ void Epd::SetLut(void) {
  */
 void Epd::DisplayFrame(const unsigned char* frame_buffer) {
     SendCommand(RESOLUTION_SETTING);
-    SendData(width >> 8);        
+    SendData(width >> 8);
     SendData(width & 0xff);
     SendData(height >> 8);
     SendData(height & 0xff);
 
     SendCommand(VCM_DC_SETTING);
-    SendData(0x12);                   
+    SendData(0x12);
 
     SendCommand(VCOM_AND_DATA_INTERVAL_SETTING);
     SendCommand(0x97);    //VBDF 17|D7 VBDW 97  VBDB 57  VBDF F7  VBDW 77  VBDB 37  VBDR B7
@@ -195,16 +229,16 @@ void Epd::DisplayFrame(const unsigned char* frame_buffer) {
             SendData(0xFF);      // bit set: white, bit reset: black
         }
         DelayMs(2);
-        SendCommand(DATA_START_TRANSMISSION_2); 
+        SendCommand(DATA_START_TRANSMISSION_2);
         for(int i = 0; i < width / 8 * height; i++) {
             SendData(pgm_read_byte(&frame_buffer[i]));
-        }  
-        DelayMs(2);                  
+        }
+        DelayMs(2);
     }
 
     SetLut();
 
-    SendCommand(DISPLAY_REFRESH); 
+    SendCommand(DISPLAY_REFRESH);
     DelayMs(100);
     WaitUntilIdle();
 }
@@ -218,25 +252,25 @@ void Epd::ClearFrame(void) {
     SendCommand(RESOLUTION_SETTING);
     SendData(width >> 8);
     SendData(width & 0xff);
-    SendData(height >> 8);        
+    SendData(height >> 8);
     SendData(height & 0xff);
-	
-    SendCommand(DATA_START_TRANSMISSION_1);           
+
+    SendCommand(DATA_START_TRANSMISSION_1);
     DelayMs(2);
 
 	Serial.println("enter loop");
-	DelayMs(2);	
+	DelayMs(2);
     for(int i = 0; i < width / 8 * height; i++) {
-        SendData(0xFF);  
-    }  
+        SendData(0xFF);
+    }
     DelayMs(2);
-    SendCommand(DATA_START_TRANSMISSION_2);           
+    SendCommand(DATA_START_TRANSMISSION_2);
     DelayMs(2);
 	Serial.println("second loop");
 	DelayMs(2);
     for(int i = 0; i < width / 8 * height; i++) {
-        SendData(0xFF);  
-    }  
+        SendData(0xFF);
+    }
     DelayMs(2);
 }
 
@@ -245,32 +279,32 @@ void Epd::ClearFrame(void) {
  */
 void Epd::DisplayFrame(void) {
     SetLut();
-    SendCommand(DISPLAY_REFRESH); 
+    SendCommand(DISPLAY_REFRESH);
     DelayMs(100);
     // WaitUntilIdle();
 }
 
 /**
- * @brief: After this command is transmitted, the chip would enter the deep-sleep mode to save power. 
- *         The deep sleep mode would return to standby by hardware reset. The only one parameter is a 
- *         check code, the command would be executed if check code = 0xA5. 
+ * @brief: After this command is transmitted, the chip would enter the deep-sleep mode to save power.
+ *         The deep sleep mode would return to standby by hardware reset. The only one parameter is a
+ *         check code, the command would be executed if check code = 0xA5.
  *         You can use Epd::Reset() to awaken and use Epd::Init() to initialize.
  */
 void Epd::Sleep() {
     SendCommand(VCOM_AND_DATA_INTERVAL_SETTING);
-    SendData(0x17);                       //border floating    
+    SendData(0x17);                       //border floating
     SendCommand(VCM_DC_SETTING);          //VCOM to 0V
     SendCommand(PANEL_SETTING);
-    DelayMs(100);          
+    DelayMs(100);
 
     SendCommand(POWER_SETTING);           //VG&VS to 0V fast
-    SendData(0x00);        
-    SendData(0x00);        
-    SendData(0x00);              
-    SendData(0x00);        
     SendData(0x00);
-    DelayMs(100);          
-                
+    SendData(0x00);
+    SendData(0x00);
+    SendData(0x00);
+    SendData(0x00);
+    DelayMs(100);
+
     SendCommand(POWER_OFF);          //power off
     WaitUntilIdle();
     SendCommand(DEEP_SLEEP);         //deep sleep
@@ -279,12 +313,12 @@ void Epd::Sleep() {
 
 const unsigned char lut_vcom0[] =
 {
-0x00, 0x17, 0x00, 0x00, 0x00, 0x02,        
-0x00, 0x17, 0x17, 0x00, 0x00, 0x02,        
-0x00, 0x0A, 0x01, 0x00, 0x00, 0x01,        
-0x00, 0x0E, 0x0E, 0x00, 0x00, 0x02,        
-0x00, 0x00, 0x00, 0x00, 0x00, 0x00,        
-0x00, 0x00, 0x00, 0x00, 0x00, 0x00,        
+0x00, 0x17, 0x00, 0x00, 0x00, 0x02,
+0x00, 0x17, 0x17, 0x00, 0x00, 0x02,
+0x00, 0x0A, 0x01, 0x00, 0x00, 0x01,
+0x00, 0x0E, 0x0E, 0x00, 0x00, 0x02,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 
 };
@@ -306,7 +340,7 @@ const unsigned char lut_bw[] ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      
+
 };
 
 const unsigned char lut_bb[] ={
@@ -317,7 +351,7 @@ const unsigned char lut_bb[] ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-             
+
 };
 
 const unsigned char lut_wb[] ={
@@ -328,14 +362,9 @@ const unsigned char lut_wb[] ={
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            
+
 };
 
 
 
 /* END OF FILE */
-
-
-
-
-

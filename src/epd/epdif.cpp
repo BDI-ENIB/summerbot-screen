@@ -24,9 +24,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "arduino.h"
+#include "Arduino.h"
 #include "epdif.h"
-#include <spi.h>
+#include <SPI.h>
 
 EpdIf::EpdIf() {
 };
@@ -63,4 +63,3 @@ int EpdIf::IfInit(void) {
     Serial.println("open");
     return 0;
 }
-

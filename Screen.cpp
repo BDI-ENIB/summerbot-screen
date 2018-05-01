@@ -32,37 +32,37 @@ Screen::Screen():
 		Serial.print("e-Paper init failed");
 	}
 	Serial.println("post");
-	
+
 	unsigned char image[3300]; // > 120*200/8
 	paint_ = new Paint(image,120,200);
-	
+
 	initFrame();
-	
+
 }
 
-void 
+void
 Screen::drawNumber(const int number) {
-	
+
 	// Serial.print("number : ");
 	// Serial.println(number);
 	// Serial.println(paint_->GetHeight());
 	paint_->Clear(UNCOLORED);
-	
+
 	for(volatile int j=0; j<7; j++) { //volatile otherwise it shit itself
 
 		if(numbers_[number] & 1<<j) {
-			
+
 			const int tx = table_[j][0];
 			const int ty = table_[j][1];
 			const int dtx = table_[j][2];
 			const int dty = table_[j][3];
-			
+
 			if(j%2 == 0) { //vertical lines
 				// Serial.println(j);
 				for(volatile int k = 0; k < dtx; k++) { //same thing as earlyer
 					paint_->DrawVerticalLine(tx+k,ty,dty,COLORED);
 				}
-			} 
+			}
 			else { //horizontal lines
 				// Serial.println(j);
 				for(volatile int k = 0; k < dty; k++) { //same thing as earlyer
@@ -71,7 +71,7 @@ Screen::drawNumber(const int number) {
 			}
 
 		}
-	
+
 	}
 
 }
@@ -80,44 +80,46 @@ void
 Screen::setScore(const int score) {
 
 	if(score > 999) { return; } //score is too high
-	
+
 	const char hundreeds = int(score/100);
 	const char decades = int((score-hundreeds*100)/10);
 	const char units = int(score%10);
-	
+
 	// Serial.println("drawHundreeds");
 	drawNumber(hundreeds);
-	epd_->SetPartialWindow(paint_->GetImage(), 16, 40, paint_->GetWidth(), paint_->GetHeight());
-	
+	epd_->SetPartialWindow(paint_->GetImage(), 16, 40,
+												 paint_->GetWidth(), paint_->GetHeight());
+
 	// Serial.println("drawDecades");
 	drawNumber(decades);
-	epd_->SetPartialWindow(paint_->GetImage(), 144, 40, paint_->GetWidth(), paint_->GetHeight());
+	epd_->SetPartialWindow(paint_->GetImage(), 144, 40,
+												 paint_->GetWidth(), paint_->GetHeight());
 
 	// Serial.println("drawUnits");
 	drawNumber(units);
-	epd_->SetPartialWindow(paint_->GetImage(), 272, 40, paint_->GetWidth(), paint_->GetHeight());
-	
+	epd_->SetPartialWindow(paint_->GetImage(), 272, 40,
+												 paint_->GetWidth(), paint_->GetHeight());
+
 }
 
 void
 Screen::initFrame() {
-	
+
 	epd_->ClearFrame();
-	
-	for(volatile int j=0; j<40; j++) {
-		paint_->DrawHorizontalLine(j,0,400,COLORED);
-	}
-	
+
+	epd_->fillPartialWindow(0,0,400,20,COLORED); //top of the screen
+	epd_->fillPartialWindow(0,260,400,40,COLORED); //bottom of the screen
+
 	setScore(0);
 	update();
-	
+
 }
 
 void
 Screen::update() {
 
 	if(isBusy()) { return; } //screen is not ready
-	
+
 	epd_->DisplayFrame();
 
 }
