@@ -3,25 +3,48 @@
 #include "Screen.h"
 
 Screen *screen;
-int score;
 
 void setup() {
 	
-	Serial.begin(19200);
+	Serial.begin(9600);
 	delay(100); //for serial
 	
 	Serial.println("start");
 	delay(100);
 	screen = new Screen;
-	score = 0;
 	
-	Serial.println("clear");
+	Serial.println("init_frame");
 	delay(100);
-	screen->initFrame();
+	// show the base frame and set the background
+	screen->showInitFrame();
 
-	Serial.println("display");
+	Serial.println("set up image");
 	delay(100);
-	screen->setScore(score);
+	// write the score in the screen buffer
+	screen->setScore(123);
+	// write the icon in the screen buffer
+	screen->drawIcon(0);
+	
+	// display the buffer
+	Serial.println("refresh");
+	screen->update();
+	
+	//wati for the screen to refresh (4sec ~)
+	while(screen->isBusy()) {
+		delay(100);
+	}
+	
+	Serial.println("set_up_new_image");
+	delay(100);
+	// write the score in the screen buffer
+	screen->setScore(42);
+	// clear the icon in the screen buffer
+	screen->clearIcon(0);
+	// write the icon in the screen buffer
+	screen->drawIcon(4);
+	
+	// display the buffer
+	Serial.println("refresh");
 	screen->update();
 	
 	Serial.println("end");
@@ -30,13 +53,7 @@ void setup() {
 
 void loop() {
 	
-	score ++;
-	Serial.println("start");
-	double startTime = millis();
-	screen->setScore(score);
-	screen->update();
-	Serial.println(millis()-startTime);
-	Serial.println("end");
-	delay(500);
+	Serial.println("nothing");
+	delay(1000);
 	
 }

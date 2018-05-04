@@ -33,10 +33,8 @@ Screen::Screen():
 	}
 	Serial.println("post");
 
-	unsigned char image[3300]; // > 120*200/8
-	paint_ = new Paint(image,120,200);
-
-	initFrame();
+	unsigned char internalNumberBuffer[3300]; // > 120*200/8
+	numberBuffer_ = new Paint(internalNumberBuffer,120,200);
 
 }
 
@@ -45,8 +43,8 @@ Screen::drawNumber(const int number) {
 
 	// Serial.print("number : ");
 	// Serial.println(number);
-	// Serial.println(paint_->GetHeight());
-	paint_->Clear(UNCOLORED);
+	// Serial.println(numberBuffer_->GetHeight());
+	numberBuffer_->Clear(UNCOLORED);
 
 	for(volatile int j=0; j<7; j++) { //volatile otherwise it shit itself
 
@@ -60,13 +58,13 @@ Screen::drawNumber(const int number) {
 			if(j%2 == 0) { //vertical lines
 				// Serial.println(j);
 				for(volatile int k = 0; k < dtx; k++) { //same thing as earlyer
-					paint_->DrawVerticalLine(tx+k,ty,dty,COLORED);
+					numberBuffer_->DrawVerticalLine(tx+k,ty,dty,COLORED);
 				}
 			}
 			else { //horizontal lines
 				// Serial.println(j);
 				for(volatile int k = 0; k < dty; k++) { //same thing as earlyer
-					paint_->DrawHorizontalLine(tx,ty+k,dtx,COLORED);
+					numberBuffer_->DrawHorizontalLine(tx,ty+k,dtx,COLORED);
 				}
 			}
 
@@ -87,32 +85,63 @@ Screen::setScore(const int score) {
 
 	// Serial.println("drawHundreeds");
 	drawNumber(hundreeds);
-	epd_->SetPartialWindow(paint_->GetImage(), 16, 40,
-												 paint_->GetWidth(), paint_->GetHeight());
+	epd_->SetPartialWindow(numberBuffer_->GetImage(), 16, 40,
+												 numberBuffer_->GetWidth(), numberBuffer_->GetHeight());
 
 	// Serial.println("drawDecades");
 	drawNumber(decades);
-	epd_->SetPartialWindow(paint_->GetImage(), 144, 40,
-												 paint_->GetWidth(), paint_->GetHeight());
+	epd_->SetPartialWindow(numberBuffer_->GetImage(), 144, 40,
+												 numberBuffer_->GetWidth(), numberBuffer_->GetHeight());
 
 	// Serial.println("drawUnits");
 	drawNumber(units);
-	epd_->SetPartialWindow(paint_->GetImage(), 272, 40,
-												 paint_->GetWidth(), paint_->GetHeight());
+	epd_->SetPartialWindow(numberBuffer_->GetImage(), 272, 40,
+												 numberBuffer_->GetWidth(), numberBuffer_->GetHeight());
 
 }
 
 void
-Screen::initFrame() {
+Screen::drawIcon(const int iconId) {
 
+	if(iconId < 0 || iconId > 8) { //id does not correspond to any icon
+		return;
+	}
+	
+	epd_->SetPartialWindow(iconsTable[iconId],(3+iconId*5)*8,264,32,32);
+
+}
+
+void
+Screen::clearIcon(const int iconId) {
+
+	if(iconId < 0 || iconId > 8) { //id does not correspond to any icon
+		return;
+	}
+
+	epd_->fillPartialWindow((3+iconId*5)*8,264,32,32,UNCOLORED);
+	
+}
+
+void
+Screen::showInitFrame() {
+
+	unsigned char internalTmpBuffer[300]; // > 400*20/8
+	Paint *tmpBuffer = new Paint(internalTmpBuffer,400,20);
+	tmpBuffer->Clear(COLORED);
+	
+	tmpBuffer->DrawStringAt(0,0,"Enigma",&Font16,UNCOLORED);
+	epd_->SetPartialWindow(tmpBuffer->GetImage(), 0, 0,
+												 tmpBuffer->GetWidth(), tmpBuffer->GetHeight());
+
+	// first buffer
 	epd_->ClearFrame();
 
 	epd_->fillPartialWindow(0,0,400,20,COLORED); //top of the screen
-	epd_->fillPartialWindow(0,260,400,40,COLORED); //bottom of the screen
+	epd_->fillPartialWindow(0,260,400,1,COLORED); //bottom of the screen
 
 	setScore(0);
-	update();
-
+	// update();
+	
 }
 
 void

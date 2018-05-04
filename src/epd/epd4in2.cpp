@@ -130,6 +130,19 @@ void Epd::SetPartialWindow(const unsigned char* buffer_black, int x, int y, int 
     SendData((y + l - 1) & 0xff);
     SendData(0x01);         // Gates scan both inside and outside of the partial window. (default)
     DelayMs(2);
+	
+	SendCommand(DATA_START_TRANSMISSION_1);
+    if (buffer_black != NULL) {
+        for(int i = 0; i < (w  / 8) * l; i++) {
+            SendData(buffer_black[i]);
+        }
+    } else {
+        for(int i = 0; i < (w  / 8) * l; i++) {
+            SendData(0x00);
+        }
+    }
+    DelayMs(2);
+	
     SendCommand(DATA_START_TRANSMISSION_2);
     if (buffer_black != NULL) {
         for(int i = 0; i < (w  / 8) * l; i++) {
@@ -161,18 +174,31 @@ void Epd::fillPartialWindow(int x, int y, int w, int l, const int colored) {
     SendData((y + l - 1) & 0xff);
     SendData(0x01);         // Gates scan both inside and outside of the partial window. (default)
     DelayMs(2);
-    SendCommand(DATA_START_TRANSMISSION_2);
-
+	
+	SendCommand(DATA_START_TRANSMISSION_1);
     if(colored) {
       for(int i = 0; i < (w / 8) * l; i++) {
-        SendData(0x80);
+        SendData(0xff);
       }
     } else {
       for(int i = 0; i < (w / 8) * l; i++) {
         SendData(0x00);
       }
     }
-    DelayMs(2);
+	DelayMs(2);
+	
+	SendCommand(DATA_START_TRANSMISSION_2);
+    if(colored) {
+      for(int i = 0; i < (w / 8) * l; i++) {
+        SendData(0xff);
+      }
+    } else {
+      for(int i = 0; i < (w / 8) * l; i++) {
+        SendData(0x00);
+      }
+    }
+	DelayMs(2);
+	
     SendCommand(PARTIAL_OUT);
 }
 
