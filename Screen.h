@@ -19,12 +19,12 @@
 //---Screen class
 
 class Screen {
-	
+
 public :
 
 	// constructor
 	Screen();
-	
+
 	// functions
 	void init();
 	void setScore(const int score);
@@ -53,7 +53,7 @@ private :
 	char numbers_[10];
 	char icons_[9][128];
 	int table_[7][4];
-	
+
 };
 
 
