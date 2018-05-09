@@ -58,8 +58,8 @@ int EpdIf::IfInit(void) {
     pinMode(DC_PIN, OUTPUT);
     pinMode(BUSY_PIN, INPUT);
     SPI.begin();
-    Serial.println("going to open");
+    // Serial.println("going to open");
     SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
-    Serial.println("open");
+    // Serial.println("open");
     return 0;
 }

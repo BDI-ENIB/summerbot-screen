@@ -47,7 +47,7 @@ int Epd::Init(void) {
     }
     /* EPD hardware init start */
     Reset();
-    Serial.println("post reset");
+    // Serial.println("post reset");
     SendCommand(POWER_SETTING);
     SendData(0x03);                  // VDS_EN, VDG_EN
     SendData(0x00);                  // VCOM_HV, VGHL_LV[1], VGHL_LV[0]
@@ -59,8 +59,9 @@ int Epd::Init(void) {
     SendData(0x17);
     SendData(0x17);                  //07 0f 17 1f 27 2F 37 2f
     SendCommand(POWER_ON);
+	// Serial.println("berfore wait");
     WaitUntilIdle();
-    Serial.println("post wui");
+    // Serial.println("post wui");
     SendCommand(PANEL_SETTING);
     SendData(0xbf);    // KW-BF   KWR-AF  BWROTP 0f
     SendData(0x0b);
