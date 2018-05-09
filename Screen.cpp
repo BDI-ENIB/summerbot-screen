@@ -40,11 +40,11 @@ Screen::Screen():
 
 	epd_ = new Epd;
 	if (epd_->Init() != 0) {
-		Serial.print("e-Paper init failed");
+		// Serial.print("e-Paper init failed");
 	}
-	Serial.println("post");
+	// Serial.println("post");
 
-	unsigned char internalNumberBuffer[3300]; // > 120*200/8
+	unsigned char internalNumberBuffer[4000]; // > 120*200/8
 	numberBuffer_ = new Paint(internalNumberBuffer,120,200);
 
 }
@@ -52,10 +52,9 @@ Screen::Screen():
 void
 Screen::drawNumber(const int number) {
 
-	// Serial.print("number : ");
-	// Serial.println(number);
-	// Serial.println(numberBuffer_->GetHeight());
+	// Serial.println("before clear");
 	numberBuffer_->Clear(UNCOLORED);
+	// Serial.println("after clear");
 
 	for(volatile int j=0; j<7; j++) { //volatile otherwise it shit itself
 
@@ -85,7 +84,7 @@ Screen::drawNumber(const int number) {
 		}
 
 	}
-
+	// Serial.println("end");
 }
 
 void
@@ -96,6 +95,7 @@ Screen::setScore(const int score, const bool refreshEnabled) {
 	const char hundreeds = int(score/100);
 	const char decades = int((score-hundreeds*100)/10);
 	const char units = int(score%10);
+
 
 	// Serial.println("drawHundreeds");
 	drawNumber(hundreeds);
@@ -112,10 +112,15 @@ Screen::setScore(const int score, const bool refreshEnabled) {
 	epd_->SetPartialWindow(numberBuffer_->GetImage(), 272, 40,
 												 numberBuffer_->GetWidth(), numberBuffer_->GetHeight());
 
+<<<<<<< HEAD
 	if(refreshEnabled) {
 		refresh();
 	}
 	
+=======
+	// Serial.println("after drawNumbers");
+
+>>>>>>> 6e20b175267fca6649ad0c59d949ab3f73935b0d
 }
 
 void
@@ -124,7 +129,7 @@ Screen::drawIcon(const int iconId, const bool refreshEnabled) {
 	if(iconId < 0 || iconId > 8) { //id does not correspond to any icon
 		return;
 	}
-	
+
 	epd_->SetPartialWindow(iconsTable[iconId],(3+iconId*5)*8,264,32,32);
 
 	if(refreshEnabled) {
@@ -141,33 +146,41 @@ Screen::clearIcon(const int iconId, const bool refreshEnabled) {
 	}
 
 	epd_->fillPartialWindow((3+iconId*5)*8,264,32,32,UNCOLORED);
+<<<<<<< HEAD
 	
 	if(refreshEnabled) {
 		refresh();
 	}
 	
+=======
+
+>>>>>>> 6e20b175267fca6649ad0c59d949ab3f73935b0d
 }
 
 void
 Screen::showInitFrame() {
 
-	unsigned char internalTmpBuffer[300]; // > 400*20/8
+	/*unsigned char internalTmpBuffer[2000]; // > 400*20/8
 	Paint *tmpBuffer = new Paint(internalTmpBuffer,400,20);
+	Serial.println(tmpBuffer->GetWidth());
+	Serial.println(tmpBuffer->GetHeight());
+	Serial.println(tmpBuffer->GetWidth()*tmpBuffer->GetHeight()/8);
 	tmpBuffer->Clear(COLORED);
-	
+
 	tmpBuffer->DrawStringAt(0,0,"Enigma",&Font16,UNCOLORED);
 	epd_->SetPartialWindow(tmpBuffer->GetImage(), 0, 0,
-												 tmpBuffer->GetWidth(), tmpBuffer->GetHeight());
+												 tmpBuffer->GetWidth(), tmpBuffer->GetHeight());*/
 
-	// first buffer
 	epd_->ClearFrame();
+	// Serial.println("back in showInitFrame");
 
 	epd_->fillPartialWindow(0,0,400,20,COLORED); //top of the screen
 	epd_->fillPartialWindow(0,260,400,1,COLORED); //bottom of the screen
 
 	setScore(0);
-	// update();
-	
+
+	// sSerial.println("end");
+
 }
 
 void
