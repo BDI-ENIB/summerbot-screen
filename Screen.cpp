@@ -66,16 +66,19 @@ Screen::drawNumber(const int number) {
 			const int dtx = table_[j][2];
 			const int dty = table_[j][3];
 
+			// Serial.println("random serial");
 			if(j%2 == 0) { //vertical lines
 				// Serial.println(j);
 				for(volatile int k = 0; k < dtx; k++) { //same thing as earlyer
 					numberBuffer_->DrawVerticalLine(tx+k,ty,dty,COLORED);
+					// Serial.println("DrawVerticalLine");
 				}
 			}
 			else { //horizontal lines
 				// Serial.println(j);
 				for(volatile int k = 0; k < dty; k++) { //same thing as earlyer
 					numberBuffer_->DrawHorizontalLine(tx,ty+k,dtx,COLORED);
+					// Serial.print("DrawHorizontalLine");
 				}
 			}
 

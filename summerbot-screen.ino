@@ -6,10 +6,10 @@
 Screen *screen;
 
 void setup() {
-	
+
 	Serial.begin(9600);
 	delay(100); //for serial
-	
+
 	Serial.println("start");
 	delay(100);
 	screen = new Screen;
@@ -34,7 +34,7 @@ void setup() {
 	while(screen->isBusy()) {
 		delay(100);
 	}
-	
+
 	Serial.println("set_up_new_image");
 	delay(100);
 	// write the score in the screen buffer
@@ -49,11 +49,11 @@ void setup() {
 	screen->refresh();
 	
 	Serial.println("end");
-	
+
 }
 
 void loop() {
-	
+
 	Serial.println("nothing");
 	delay(1000);
 	
