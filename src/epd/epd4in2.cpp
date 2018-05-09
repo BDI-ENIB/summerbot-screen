@@ -130,7 +130,7 @@ void Epd::SetPartialWindow(const unsigned char* buffer_black, int x, int y, int 
     SendData((y + l - 1) & 0xff);
     SendData(0x01);         // Gates scan both inside and outside of the partial window. (default)
     DelayMs(2);
-	
+
 	SendCommand(DATA_START_TRANSMISSION_1);
     if (buffer_black != NULL) {
         for(int i = 0; i < (w  / 8) * l; i++) {
@@ -142,7 +142,7 @@ void Epd::SetPartialWindow(const unsigned char* buffer_black, int x, int y, int 
         }
     }
     DelayMs(2);
-	
+
     SendCommand(DATA_START_TRANSMISSION_2);
     if (buffer_black != NULL) {
         for(int i = 0; i < (w  / 8) * l; i++) {
@@ -174,7 +174,7 @@ void Epd::fillPartialWindow(int x, int y, int w, int l, const int colored) {
     SendData((y + l - 1) & 0xff);
     SendData(0x01);         // Gates scan both inside and outside of the partial window. (default)
     DelayMs(2);
-	
+
 	SendCommand(DATA_START_TRANSMISSION_1);
     if(colored) {
       for(int i = 0; i < (w / 8) * l; i++) {
@@ -186,7 +186,7 @@ void Epd::fillPartialWindow(int x, int y, int w, int l, const int colored) {
       }
     }
 	DelayMs(2);
-	
+
 	SendCommand(DATA_START_TRANSMISSION_2);
     if(colored) {
       for(int i = 0; i < (w / 8) * l; i++) {
@@ -198,7 +198,7 @@ void Epd::fillPartialWindow(int x, int y, int w, int l, const int colored) {
       }
     }
 	DelayMs(2);
-	
+
     SendCommand(PARTIAL_OUT);
 }
 
@@ -274,7 +274,7 @@ void Epd::DisplayFrame(const unsigned char* frame_buffer) {
  */
 void Epd::ClearFrame(void) {
 
-	Serial.println("start clear");
+	// Serial.println("start clear");
     SendCommand(RESOLUTION_SETTING);
     SendData(width >> 8);
     SendData(width & 0xff);
@@ -284,7 +284,7 @@ void Epd::ClearFrame(void) {
     SendCommand(DATA_START_TRANSMISSION_1);
     DelayMs(2);
 
-	Serial.println("enter loop");
+	// Serial.println("enter loop");
 	DelayMs(2);
     for(int i = 0; i < (int)(width / 8 * height); i++) {
         SendData(0xFF);
@@ -292,7 +292,7 @@ void Epd::ClearFrame(void) {
     DelayMs(2);
     SendCommand(DATA_START_TRANSMISSION_2);
     DelayMs(2);
-	Serial.println("second loop");
+	// Serial.println("second loop");
 	DelayMs(2);
     for(int i = 0; i < (int)(width / 8 * height); i++) {
         SendData(0xFF);

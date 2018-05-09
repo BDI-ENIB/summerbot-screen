@@ -16,7 +16,7 @@ Screen::Screen():
 			 0b00110001,
 			 0b01111111,
 			 0b01111011 },
-			 
+
 	table_{ {20-THICKNESS,20-THICKNESS,80+2*THICKNESS,2*THICKNESS},
 			{20-THICKNESS,20-THICKNESS,2*THICKNESS,80+THICKNESS},
 			{20-THICKNESS,100,2*THICKNESS,80+THICKNESS},
@@ -112,15 +112,12 @@ Screen::setScore(const int score, const bool refreshEnabled) {
 	epd_->SetPartialWindow(numberBuffer_->GetImage(), 272, 40,
 												 numberBuffer_->GetWidth(), numberBuffer_->GetHeight());
 
-<<<<<<< HEAD
 	if(refreshEnabled) {
 		refresh();
 	}
-	
-=======
+
 	// Serial.println("after drawNumbers");
 
->>>>>>> 6e20b175267fca6649ad0c59d949ab3f73935b0d
 }
 
 void
@@ -135,7 +132,7 @@ Screen::drawIcon(const int iconId, const bool refreshEnabled) {
 	if(refreshEnabled) {
 		refresh();
 	}
-	
+
 }
 
 void
@@ -146,15 +143,11 @@ Screen::clearIcon(const int iconId, const bool refreshEnabled) {
 	}
 
 	epd_->fillPartialWindow((3+iconId*5)*8,264,32,32,UNCOLORED);
-<<<<<<< HEAD
-	
+
 	if(refreshEnabled) {
 		refresh();
 	}
-	
-=======
 
->>>>>>> 6e20b175267fca6649ad0c59d949ab3f73935b0d
 }
 
 void
@@ -186,6 +179,7 @@ Screen::showInitFrame() {
 void
 Screen::refresh() {
 
+	Serial.println("refresh");
 	if(isBusy()) { return; } //screen is not ready
 
 	epd_->DisplayFrame();

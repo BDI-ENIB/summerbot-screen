@@ -3,5 +3,6 @@
 
 #define ARMED 0
 #define ATI 1
+#define VIVE 8
 
 #endif

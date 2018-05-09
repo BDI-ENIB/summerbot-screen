@@ -26,22 +26,15 @@ void setup() {
 	// write the score in the screen buffer
 	screen->setScore(123,false);
 	// write the icon in the screen buffer
-<<<<<<< HEAD
-	screen->drawIcon(ARMED,false);
-	
+
+	Serial.println("draw armed");
+	screen->drawIcon(ARMED);
+
 	// display the buffer
 	Serial.println("refresh");
 	screen->refresh();
-	
-=======
-	screen->drawIcon(0);
 
-	// display the buffer
-	Serial.println("refresh");
-	screen->update();
-
->>>>>>> 6e20b175267fca6649ad0c59d949ab3f73935b0d
-	//wati for the screen to refresh (4sec ~)
+	//wait for the screen to refresh (4sec ~)
 	while(screen->isBusy()) {
 		delay(100);
 	}
@@ -53,21 +46,21 @@ void setup() {
 	// clear the icon in the screen buffer
 	screen->clearIcon(ARMED,false);
 	// write the icon in the screen buffer
-<<<<<<< HEAD
-	screen->drawIcon(ATI,false);
-	
+	screen->drawIcon(VIVE,false);
+
 	// display the buffer
 	Serial.println("refresh");
 	screen->refresh();
-	
-=======
-	screen->drawIcon(4);
 
-	// display the buffer
-	Serial.println("refresh");
-	screen->update();
+	//wait for the screen to refresh (4sec ~)
+	while(screen->isBusy()) {
+		delay(100);
+	}
 
->>>>>>> 6e20b175267fca6649ad0c59d949ab3f73935b0d
+	screen->clearIcon(VIVE,false);
+	// write the icon in the screen buffer
+	screen->drawIcon(ARMED);
+
 	Serial.println("end");
 
 }

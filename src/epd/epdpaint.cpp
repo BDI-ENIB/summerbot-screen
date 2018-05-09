@@ -49,20 +49,20 @@ void Paint::Clear(int colored) {
     //     }
     //}
     const int size = (this->width*this->height)/8;
-    Serial.print("size =");
-    Serial.println(size);
+    // Serial.print("size =");
+    // Serial.println(size);
     if(colored) {
       for(volatile int i=0; i < size; i++) {
-        Serial.println(i);
+        // Serial.println(i);
         this->image[i] = 0xff;
       }
     } else {
       for(volatile int i=0; i < size; i++) {
-        Serial.println(i);
+        // Serial.println(i);
         this->image[i] = 0x00;
       }
     }
-    Serial.println("end");
+    // Serial.println("end");
 }
 
 /**
