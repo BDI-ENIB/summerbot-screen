@@ -27,11 +27,11 @@ public :
 	
 	// functions
 	void init();
-	void setScore(const int score);
-	void drawIcon(const int iconId);
-	void clearIcon(const int iconId);
+	void setScore(const int score,const bool refreshEnabled = true);
+	void drawIcon(const int iconId, const bool refreshEnabled = true);
+	void clearIcon(const int iconId, const bool refreshEnabled = true);
 	void showInitFrame();
-	void update();
+	void refresh();
 
 	// inline functions
 	void clearScreen() {

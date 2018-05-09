@@ -6,6 +6,17 @@
 //---constructor
 
 Screen::Screen():
+	numbers_{0b00111111,
+			 0b00110000,
+		     0b01101101,
+			 0b01111001,
+			 0b01110010,
+			 0b01011011,
+			 0b01011111,
+			 0b00110001,
+			 0b01111111,
+			 0b01111011 },
+			 
 	table_{ {20-THICKNESS,20-THICKNESS,80+2*THICKNESS,2*THICKNESS},
 			{20-THICKNESS,20-THICKNESS,2*THICKNESS,80+THICKNESS},
 			{20-THICKNESS,100,2*THICKNESS,80+THICKNESS},
@@ -15,17 +26,17 @@ Screen::Screen():
 			{20-THICKNESS,100-THICKNESS,80+2*THICKNESS,2*THICKNESS} }
 	{
 
-	//number data base
-	numbers_[0] = 0b00111111;
-	numbers_[1] = 0b00110000;
-	numbers_[2] = 0b01101101;
-	numbers_[3] = 0b01111001;
-	numbers_[4] = 0b01110010;
-	numbers_[5] = 0b01011011;
-	numbers_[6] = 0b01011111;
-	numbers_[7] = 0b00110001;
-	numbers_[8] = 0b01111111;
-	numbers_[9] = 0b01111011;
+	// number data base
+	// numbers_[0] = 0b00111111;
+	// numbers_[1] = 0b00110000;
+	// numbers_[2] = 0b01101101;
+	// numbers_[3] = 0b01111001;
+	// numbers_[4] = 0b01110010;
+	// numbers_[5] = 0b01011011;
+	// numbers_[6] = 0b01011111;
+	// numbers_[7] = 0b00110001;
+	// numbers_[8] = 0b01111111;
+	// numbers_[9] = 0b01111011;
 
 	epd_ = new Epd;
 	if (epd_->Init() != 0) {
@@ -75,7 +86,7 @@ Screen::drawNumber(const int number) {
 }
 
 void
-Screen::setScore(const int score) {
+Screen::setScore(const int score, const bool refreshEnabled) {
 
 	if(score > 999) { return; } //score is too high
 
@@ -98,10 +109,14 @@ Screen::setScore(const int score) {
 	epd_->SetPartialWindow(numberBuffer_->GetImage(), 272, 40,
 												 numberBuffer_->GetWidth(), numberBuffer_->GetHeight());
 
+	if(refreshEnabled) {
+		refresh();
+	}
+	
 }
 
 void
-Screen::drawIcon(const int iconId) {
+Screen::drawIcon(const int iconId, const bool refreshEnabled) {
 
 	if(iconId < 0 || iconId > 8) { //id does not correspond to any icon
 		return;
@@ -109,16 +124,24 @@ Screen::drawIcon(const int iconId) {
 	
 	epd_->SetPartialWindow(iconsTable[iconId],(3+iconId*5)*8,264,32,32);
 
+	if(refreshEnabled) {
+		refresh();
+	}
+	
 }
 
 void
-Screen::clearIcon(const int iconId) {
+Screen::clearIcon(const int iconId, const bool refreshEnabled) {
 
 	if(iconId < 0 || iconId > 8) { //id does not correspond to any icon
 		return;
 	}
 
 	epd_->fillPartialWindow((3+iconId*5)*8,264,32,32,UNCOLORED);
+	
+	if(refreshEnabled) {
+		refresh();
+	}
 	
 }
 
@@ -145,7 +168,7 @@ Screen::showInitFrame() {
 }
 
 void
-Screen::update() {
+Screen::refresh() {
 
 	if(isBusy()) { return; } //screen is not ready
 

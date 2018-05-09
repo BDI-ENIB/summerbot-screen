@@ -1,6 +1,7 @@
 //---headers
 
 #include "Screen.h"
+#include "IconsId.h"
 
 Screen *screen;
 
@@ -21,13 +22,13 @@ void setup() {
 	Serial.println("set up image");
 	delay(100);
 	// write the score in the screen buffer
-	screen->setScore(123);
+	screen->setScore(123,false);
 	// write the icon in the screen buffer
-	screen->drawIcon(0);
+	screen->drawIcon(ARMED,false);
 	
 	// display the buffer
 	Serial.println("refresh");
-	screen->update();
+	screen->refresh();
 	
 	//wati for the screen to refresh (4sec ~)
 	while(screen->isBusy()) {
@@ -37,15 +38,15 @@ void setup() {
 	Serial.println("set_up_new_image");
 	delay(100);
 	// write the score in the screen buffer
-	screen->setScore(42);
+	screen->setScore(42,false);
 	// clear the icon in the screen buffer
-	screen->clearIcon(0);
+	screen->clearIcon(ARMED,false);
 	// write the icon in the screen buffer
-	screen->drawIcon(4);
+	screen->drawIcon(ATI,false);
 	
 	// display the buffer
 	Serial.println("refresh");
-	screen->update();
+	screen->refresh();
 	
 	Serial.println("end");
 	
