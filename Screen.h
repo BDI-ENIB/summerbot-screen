@@ -30,7 +30,7 @@ public :
 	void setScore(const int score,const bool refreshEnabled = true);
 	void drawIcon(const int iconId, const bool refreshEnabled = true);
 	void clearIcon(const int iconId, const bool refreshEnabled = true);
-	void showInitFrame();
+	void showInitFrame(const int score = 0);
 	void refresh();
 
 	// inline functions

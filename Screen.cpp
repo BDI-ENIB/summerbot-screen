@@ -151,7 +151,7 @@ Screen::clearIcon(const int iconId, const bool refreshEnabled) {
 }
 
 void
-Screen::showInitFrame() {
+Screen::showInitFrame(const int score) {
 
 	/*unsigned char internalTmpBuffer[2000]; // > 400*20/8
 	Paint *tmpBuffer = new Paint(internalTmpBuffer,400,20);
@@ -170,7 +170,7 @@ Screen::showInitFrame() {
 	epd_->fillPartialWindow(0,0,400,20,COLORED); //top of the screen
 	epd_->fillPartialWindow(0,260,400,1,COLORED); //bottom of the screen
 
-	setScore(0);
+	setScore(score);
 
 	// sSerial.println("end");
 
