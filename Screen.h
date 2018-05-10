@@ -23,7 +23,7 @@ class Screen {
 public :
 
 	// constructor
-	Screen();
+	Screen(bool simulator);
 
 	// functions
 	void init();
@@ -53,7 +53,7 @@ private :
 	char numbers_[10];
 	char icons_[9][128];
 	int table_[7][4];
-
+	bool simulator;
 };
 
 

@@ -5,7 +5,8 @@
 
 //---constructor
 
-Screen::Screen():
+Screen::Screen(bool s):
+	simulator{s},
 	numbers_{0b00111111,
 			 0b00110000,
 		     0b01101101,
@@ -38,11 +39,15 @@ Screen::Screen():
 	// numbers_[8] = 0b01111111;
 	// numbers_[9] = 0b01111011;
 
-	epd_ = new Epd;
-	if (epd_->Init() != 0) {
-		// Serial.print("e-Paper init failed");
+	if(simulator){
+		Serial.println("LOG Inited_Screen");
+	}else{
+		epd_ = new Epd;
+		if (epd_->Init() != 0) {
+			// Serial.print("e-Paper init failed");
+		}
+		// Serial.println("post");
 	}
-	// Serial.println("post");
 
 	unsigned char internalNumberBuffer[4000]; // > 120*200/8
 	numberBuffer_ = new Paint(internalNumberBuffer,120,200);
@@ -89,7 +94,7 @@ Screen::drawNumber(const int number) {
 
 void
 Screen::setScore(const int score, const bool refreshEnabled) {
-
+	if(simulator) Serial.println("LOG screen_score_"+String(score));
 	if(score > 999) { return; } //score is too high
 
 	const char hundreeds = int(score/100);
@@ -123,6 +128,7 @@ Screen::setScore(const int score, const bool refreshEnabled) {
 void
 Screen::drawIcon(const int iconId, const bool refreshEnabled) {
 
+	if(simulator) Serial.println("LOG screen_drawn_icon_"+String(iconId));
 	if(iconId < 0 || iconId > 8) { //id does not correspond to any icon
 		return;
 	}
@@ -138,6 +144,7 @@ Screen::drawIcon(const int iconId, const bool refreshEnabled) {
 void
 Screen::clearIcon(const int iconId, const bool refreshEnabled) {
 
+	if(simulator) Serial.println("LOG screen_cleared_icon_"+String(iconId));
 	if(iconId < 0 || iconId > 8) { //id does not correspond to any icon
 		return;
 	}
@@ -179,9 +186,9 @@ Screen::showInitFrame(const int score) {
 void
 Screen::refresh() {
 
-	Serial.println("refresh");
 	//if(isBusy()) { return; } //screen is not ready
 
-	epd_->DisplayFrame();
+	if(simulator) Serial.println("LOG screen_refresh");
+	else epd_->DisplayFrame();
 
 }
