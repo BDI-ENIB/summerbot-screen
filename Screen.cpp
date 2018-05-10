@@ -179,7 +179,7 @@ Screen::showInitFrame(const int score) {
 void
 Screen::refresh() {
 
-	// Serial.println("refresh");
+	Serial.println("refresh");
 	//if(isBusy()) { return; } //screen is not ready
 
 	epd_->DisplayFrame();
