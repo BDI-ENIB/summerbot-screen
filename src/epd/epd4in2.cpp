@@ -308,7 +308,7 @@ void Epd::DisplayFrame(void) {
     SetLut();
     SendCommand(DISPLAY_REFRESH);
     DelayMs(100);
-    WaitUntilIdle();
+    // WaitUntilIdle();
 }
 
 /**

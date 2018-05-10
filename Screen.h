@@ -53,7 +53,7 @@ private :
 	char numbers_[10];
 	char icons_[9][128];
 	int table_[7][4];
-	bool simulator;
+	bool simulator_;
 };
 
 
