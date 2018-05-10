@@ -7,7 +7,7 @@
 
 Screen::Screen(bool s):
 	simulator_{s},
-	
+
 	numbers_{0b00111111,
 			 0b00110000,
 		     0b01101101,
@@ -160,7 +160,7 @@ Screen::clearIcon(const int iconId, const bool refreshEnabled) {
 
 void
 Screen::showInitFrame(const int score) {
-
+	if(simulator_)return;
 	/*unsigned char internalTmpBuffer[2000]; // > 400*20/8
 	Paint *tmpBuffer = new Paint(internalTmpBuffer,400,20);
 	Serial.println(tmpBuffer->GetWidth());
