@@ -39,6 +39,7 @@ public :
 		epd_->DisplayFrame();
 	}
 	bool isBusy() {
+		if(simulator_)return false;
 		return epd_->isBusy();
 	}
 
