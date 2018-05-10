@@ -12,7 +12,7 @@ void setup() {
 
 	Serial.println("start");
 	delay(100);
-	screen = new Screen;
+	screen = new Screen(false);
 
 	Serial.println("showInitFrame");
 	delay(100);

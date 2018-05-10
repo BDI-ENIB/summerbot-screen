@@ -94,7 +94,7 @@ Screen::drawNumber(const int number) {
 
 void
 Screen::setScore(const int score, const bool refreshEnabled) {
-	if(simulator) Serial.println("LOG screen_score_"+string(score));
+	if(simulator) Serial.println("LOG screen_score_"+String(score));
 	if(score > 999) { return; } //score is too high
 
 	const char hundreeds = int(score/100);
