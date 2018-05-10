@@ -28,7 +28,7 @@ void setup() {
 	// write the icon in the screen buffer
 
 	Serial.println("draw armed");
-	screen->drawIcon(ARMED);
+	screen->drawIcon(LAUNCHED);
 
 	// display the buffer
 	Serial.println("refresh");
@@ -44,7 +44,7 @@ void setup() {
 	// write the score in the screen buffer
 	screen->setScore(42,false);
 	// clear the icon in the screen buffer
-	screen->clearIcon(ARMED,false);
+	screen->clearIcon(LAUNCHED,false);
 	// write the icon in the screen buffer
 	screen->drawIcon(VIVE,false);
 
@@ -59,7 +59,7 @@ void setup() {
 
 	screen->clearIcon(VIVE,false);
 	// write the icon in the screen buffer
-	screen->drawIcon(ARMED);
+	screen->drawIcon(TIME_LIMIT);
 
 	Serial.println("end");
 
