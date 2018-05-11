@@ -178,6 +178,7 @@ Screen::clearIcon(const int iconId, const bool refreshEnabled) {
 
 void
 Screen::showInitFrame(const int score) {
+<<<<<<< HEAD
 
 	if(simulator_) {
 		Serial.println("LOG screen_show_init_frame");
@@ -193,6 +194,8 @@ Screen::showInitFrame(const int score) {
 
 		tmpBuffer->DrawStringAt(0,0,"Enigma",&Font16,UNCOLORED);
 		epd_->SetPartialWindow(tmpBuffer->GetImage(), 0, 0,
+=======
+>>>>>>> 4c376a239cc5bd202a0dd92188cdcbd4acd27c0b
 												 tmpBuffer->GetWidth(), tmpBuffer->GetHeight());*/
 
 		epd_->ClearFrame();

@@ -34,6 +34,7 @@ public :
 	void refresh();
 	void clearScreen();
 	bool isBusy() {
+		if(simulator_)return false;
 		return epd_->isBusy();
 	}
 
