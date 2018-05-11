@@ -32,12 +32,7 @@ public :
 	void clearIcon(const int iconId, const bool refreshEnabled = true);
 	void showInitFrame(const int score = 0);
 	void refresh();
-
-	// inline functions
-	void clearScreen() {
-		epd_->ClearFrame();
-		epd_->DisplayFrame();
-	}
+	void clearScreen();
 	bool isBusy() {
 		return epd_->isBusy();
 	}
